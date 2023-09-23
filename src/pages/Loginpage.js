@@ -1,12 +1,25 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { loginUser } from '../redux/store/userSlice';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { authLogin } from '../redux/store/authSlice';
+import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
 
 const Loginpage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isLoading, isSuccess, isError, message, user } = useSelector(state => state.auth);
+
+    useEffect(() => {
+        if (message) alert(message);
+
+        if (user && user.token) {
+            navigate('/upload');
+        }
+
+    }, [isLoading, isSuccess, isError, message, user, dispatch, navigate]);
+
     const submitHandler = (event) => {
         event.preventDefault();
         if (email === undefined || email === '' || email === null)
@@ -17,26 +30,38 @@ const Loginpage = () => {
 
         console.log('hi');
         const formData = { email, password }
-        dispatch(loginUser(formData));
+        dispatch(authLogin(formData));
         // dispatch(loginHandler(formData));
         setEmail('');
         setPassword('');
     };
     return (
-        <form method='post' onSubmit={submitHandler}>
-            <div className='form-group'>
-                <label>Email:</label><br />
-                <input type='text' className='form-control' name='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email...' />
-            </div>
-            <div className='form-group'>
-                <label>Password:</label><br />
-                <input type='password' className='form-control' name='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password...' />
-            </div>
-            <div className='form-group'><br />
-                <button type='submit' className='btn btn-success form-control'>Login</button>
-            </div>
-            <Link to="/signup"><p>Signup</p></Link>
-        </form>
+        <>
+            <Container>
+                <Row>
+                    <Col></Col>
+                    <Col>
+                        <h1>Login</h1>
+                        <Form method='post' onSubmit={submitHandler}>
+                            <Form.Group>
+                                <FloatingLabel controlId='floatingInput' label="Enter Your Email..." className='mb-3'>
+                                    <Form.Control type='text' name='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter Your Email...' />
+                                </FloatingLabel>
+                            </Form.Group>
+                            <Form.Group>
+                                <FloatingLabel controlId='floatingInput' label="Enter Your Password..." className='mb-3'>
+                                    <Form.Control type='password' name='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Enter Your Password...' />
+                                </FloatingLabel>
+                            </Form.Group>
+                            <Form.Group className='mb-3 mt-3'>
+                                <Button variant='primary' type='submit'>Login</Button>
+                            </Form.Group>
+                            <Link to="/signup"><p>Signup</p></Link>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     )
 }
 
