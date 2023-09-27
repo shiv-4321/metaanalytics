@@ -15,6 +15,7 @@ const Loginpage = () => {
         if (message) alert(message);
 
         if (user && user.token) {
+            localStorage.setItem('user', JSON.stringify(user));
             navigate('/upload');
         }
 
@@ -31,7 +32,6 @@ const Loginpage = () => {
         console.log('hi');
         const formData = { email, password }
         dispatch(authLogin(formData));
-        // dispatch(loginHandler(formData));
         setEmail('');
         setPassword('');
     };

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Papa from 'papaparse';
+import { getToken } from '../middleware/authMiddleware';
+import { Button } from 'react-bootstrap';
 
 const Upload = () => {
     const [file, setFile] = useState();
@@ -45,7 +47,7 @@ const Upload = () => {
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h1>import File</h1>
+            <h1>Import File</h1>
             <form onSubmit={submitHandler}>
                 <input type='file' accept={".csv"} id='csvFile' onChange={fileHandler} />
                 <button>import</button>
@@ -55,22 +57,16 @@ const Upload = () => {
                 <table style={{ borderCollapse: "collapse", border: "1px solid black", margin: "5px auto" }}>
                     <thead>
                         {columns.map(col => <th>{col}</th>)}
+                        <th><Button variant='success'>Send</Button></th>
                     </thead>
                     <tbody>
                         {
                             values.map(val =>
                                 <tr>
-                                    <td>{val['Import ID']}</td>
-                                    <td>{val['Payment Type']}</td>
-                                    <td>{val['Tags']}</td>
-                                    <td>{val['Username']}</td>
-                                    <td>{val['Meta Title']}</td>
+                                    <td>{val['FIrstname']}</td>
+                                    <td>{val['Lastname']}</td>
+                                    <td>{val['Country Code']}</td>
                                     <td>{val['Phone Number']}</td>
-                                    <td>{val['Address Line 1']}</td>
-                                    <td>{val['City']}</td>
-                                    <td>{val['District']}</td>
-                                    <td>{val['State Name']}</td>
-                                    <td>{val['Pincode']}</td>
                                 </tr>
                             )
                         }
