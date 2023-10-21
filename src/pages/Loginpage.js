@@ -10,30 +10,48 @@ const Loginpage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isLoading, isSuccess, isError, message, user } = useSelector(state => state.auth);
+    const isValidEmail = (val) => val.includes('@');
+    const isValidPwd = (pass) => pass.length >= 6;
 
     useEffect(() => {
-        if (message) alert(message);
+        if (message && user !== null) alert(message);
 
         if (user && user.token) {
             localStorage.setItem('user', JSON.stringify(user));
-            navigate('/upload');
+            navigate('/');
         }
 
     }, [isLoading, isSuccess, isError, message, user, dispatch, navigate]);
 
     const submitHandler = (event) => {
         event.preventDefault();
-        if (email === undefined || email === '' || email === null)
-            return;
 
-        if (password === undefined || password === '' || password === null)
+
+        if (email === undefined || email === '' || email === null) {
+            alert(`The email field is required.`);
             return;
+        }
+
+        if (!isValidEmail(email)) {
+            alert(`Please enter the valid email address.`);
+            return;
+        }
+
+        if (password === undefined || password === '' || password === null) {
+            alert(`The password field is required.`);
+            return;
+        }
+
+        if (!isValidPwd(password)) {
+            alert(`Please enter the valid password.`);
+            return;
+        }
 
         console.log('hi');
         const formData = { email, password }
         dispatch(authLogin(formData));
-        setEmail('');
-        setPassword('');
+        // setEmail('');
+        // setPassword('');
     };
     return (
         <>

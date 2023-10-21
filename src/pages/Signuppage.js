@@ -32,7 +32,6 @@ const Signuppage = () => {
             alert(user.message);
             if (user.data)
                 navigate('/login');
-
         }
     }, [isLoading, isSuccess, isError, message, user, dispatch, navigate]);
 
